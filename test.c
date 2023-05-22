@@ -1,24 +1,37 @@
 #include <stdlib.h>
+#include <stdio.h>
 #include "raylib.h"
 #include <string.h>
 #include<unistd.h>
+#include <time.h>
 
+void suffleArray (int *arr, int size){
 
-int *initArray(int size){
-    int * copy = malloc(sizeof(int)*size);
-    
+    int rand_index;
+
+    srand(time(NULL));
+
     for(int i=0;i<size;i++){
-        int r = (rand() % 440) + 10;
+        rand_index = rand() % size;
+        int temp = arr[i];
+        arr[i] = arr[rand_index];
+        arr[rand_index] = temp;
+    }
+}
+int *initArray(int size){
+    int * copy = malloc(sizeof(int) * size);
+
+    for(int i=0;i<size;i++){
+        int r = 20*i;
         copy[i] = r;
     }
-
     return copy;
 }
 
-void drawArray(int *arr, int boxWidth){
+void drawArray(int *arr, int size,int boxWidth){
     int posX = 0;
 
-    for(int i = 0; i < 25; i++){
+    for(int i = 0; i < size; i++){
         posX = boxWidth*i;
 
         DrawRectangle(posX, GetScreenHeight()-arr[i], boxWidth, arr[i], MAROON);
@@ -27,9 +40,10 @@ void drawArray(int *arr, int boxWidth){
 
 
 int *bubbleSort(int *array, unsigned size){
-    int * copy = malloc(sizeof(int)*size);
+    int * copy = malloc(sizeof(int) * size);
     memcpy(copy, array, size * sizeof(int));
 
+    //free(array);
     //sort it
     for(int i=0;i<size-1;i++){
         for(int j=0;j < size -1 -i;j++){
@@ -48,12 +62,17 @@ int *bubbleSort(int *array, unsigned size){
 
 int main(void)
 {
-    int *arr = initArray(25); 
+    int arr_length = 50;
+    int *arr;
+    arr = initArray(arr_length); 
+    int ARR_SIZE = arr_length;
 
+    printf("%d \n", ARR_SIZE);
+    suffleArray(arr, ARR_SIZE);
     // Initialization
     //--------------------------------------------------------------------------------------
-    const int screenWidth = 800;
-    const int screenHeight = 450;
+    const int screenWidth = 2000;
+    const int screenHeight = 1000;
 
     const int boxWidth = 32;
 
@@ -75,11 +94,11 @@ int main(void)
         //----------------------------------------------------------------------------------
         BeginDrawing();
 
-            if(bubbleSort(arr, 25) != NULL){
-                arr = bubbleSort(arr, 25);
-                drawArray(arr, 32);
+            if(bubbleSort(arr, ARR_SIZE) != NULL){
+                arr = bubbleSort(arr, ARR_SIZE);
+                drawArray(arr, ARR_SIZE,boxWidth);
             }else {
-                drawArray(arr, 32);
+                drawArray(arr, ARR_SIZE, boxWidth);
             }
 
             ClearBackground(RAYWHITE);
@@ -94,6 +113,7 @@ int main(void)
     //--------------------------------------------------------------------------------------
     CloseWindow();        // Close window and OpenGL context
     //--------------------------------------------------------------------------------------
+    free(arr);
 
     return 0;
 }
