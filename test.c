@@ -92,13 +92,23 @@ int main(void)
 
         // Draw
         //----------------------------------------------------------------------------------
-        BeginDrawing();
+        DrawText("Comands: B = bubbleSort S = Suffle", 1605, 10, 20, DARKGRAY);
 
-            if(bubbleSort(arr, ARR_SIZE) != NULL){
-                arr = bubbleSort(arr, ARR_SIZE);
-                drawArray(arr, ARR_SIZE,boxWidth);
-            }else {
-                drawArray(arr, ARR_SIZE, boxWidth);
+        BeginDrawing();
+            if (IsKeyDown(KEY_B)) {
+
+                if(bubbleSort(arr, ARR_SIZE) != NULL){
+                    arr = bubbleSort(arr, ARR_SIZE);
+                    drawArray(arr, ARR_SIZE,boxWidth);
+                }else {
+                    drawArray(arr, ARR_SIZE, boxWidth);
+                }
+            } else {
+                    drawArray(arr, ARR_SIZE, boxWidth);
+            }
+    
+            if(IsKeyDown(KEY_S)){
+                suffleArray(arr, ARR_SIZE);
             }
 
             ClearBackground(RAYWHITE);
